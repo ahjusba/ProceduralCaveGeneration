@@ -21,9 +21,7 @@ public class MapGenerator : MonoBehaviour
     int[,] map;
 
     private void Start() {
-        GenerateMap();
-
-        
+        GenerateMap();        
     }
 
     void GenerateMap() {
@@ -33,6 +31,9 @@ public class MapGenerator : MonoBehaviour
         for (int i = 0; i < smoothingIterations; i++) {
             SmoothMap();
         }
+
+        MeshGenerator meshGen = GetComponent<MeshGenerator>();
+        meshGen.GenerateMesh(map, 1);
     }
 
     void RandomFillMap() {
@@ -48,8 +49,7 @@ public class MapGenerator : MonoBehaviour
                     map[x, y] = 1; //Borders of the grid are always walls
                  } else {
                     map[x, y] = pseudoRandom.Next(0, 100) < randomFillPercent ? 1 : 0; //either the node has wall (1) or not (0)
-                }
-               
+                }               
             }
         }
     }
@@ -64,7 +64,6 @@ public class MapGenerator : MonoBehaviour
                 } else if (neighbourWallTiles < smoothingNeighbourCondition) {
                     map[x, y] = 0;
                 }
-
             }
         }
     }
@@ -85,20 +84,20 @@ public class MapGenerator : MonoBehaviour
         return wallCount;
     }
 
-    private void OnDrawGizmos() {
-        if (map != null) {
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
+    //private void OnDrawGizmos() {
+    //    if (map != null) {
+    //        for (int x = 0; x < width; x++) {
+    //            for (int y = 0; y < height; y++) {
                     
 
 
-                    Gizmos.color = (map[x, y] == 1) ? Color.black : Color.white;
-                    Vector3 pos = new Vector3(-width / 2 + x + .5f, 0, -height / 2 + y + .5f);
-                    Gizmos.DrawCube(pos, Vector3.one);
-                }
-            }
-        }
-    }
+    //                Gizmos.color = (map[x, y] == 1) ? Color.black : Color.white;
+    //                Vector3 pos = new Vector3(-width / 2 + x + .5f, 0, -height / 2 + y + .5f);
+    //                Gizmos.DrawCube(pos, Vector3.one);
+    //            }
+    //        }
+    //    }
+    //}
 
     private void Update() {
         if (Input.GetKeyDown(KeyCode.Space)) {
