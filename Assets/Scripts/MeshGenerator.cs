@@ -8,6 +8,7 @@ public class MeshGenerator : MonoBehaviour
     List<Vector3> vertices;
     List<int> triangles;
 
+
     public void GenerateMesh(int[,] map, float squareSize) {
         squareGrid = new SquareGrid(map, squareSize);
 
@@ -219,14 +220,17 @@ public class MeshGenerator : MonoBehaviour
 
         public Node above, right;
         public bool active;
+        public bool useRandomNodePosition = false;
 
         public ControlNode(Vector3 _pos, bool _active, float squareSize) : base(_pos) {
             active = _active;
-            above = new Node(_pos + Vector3.forward * squareSize/2);
-            right = new Node(_pos + Vector3.right * squareSize/2);
+            float nodeOffset = (useRandomNodePosition == true) ? Mathf.Clamp01(Random.Range(0.05f, 0.95f)) : 0.5f;
+            above = new Node(_pos + Vector3.forward * squareSize * nodeOffset);
+            right = new Node(_pos + Vector3.right * squareSize * nodeOffset);
         }
     }
-    
+
+   
 
 
 }
